@@ -85,6 +85,7 @@ ZSH_CUSTOM=$HOME/.dotfiles/zsh/.oh-my-zsh/custom
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git 
+    zsh-syntax-highlighting
     zsh-autosuggestions
 )
 
@@ -118,4 +119,3 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
