@@ -10,6 +10,7 @@ alias vim="nvim"
 alias grep="rg"
 #Change autosuggest accept to escape
 bindkey '\e' autosuggest-accept
+KEYTIMEOUT=1
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
