@@ -9,7 +9,6 @@ fi
 alias vim="nvim"
 alias grep="rg"
 #Change autosuggest accept to escape
-bindkey '\e' autosuggest-accept
 KEYTIMEOUT=1
 
 # If you come from bash you might have to change your $PATH.
@@ -87,7 +86,6 @@ ZSH_CUSTOM=$HOME/.dotfiles/zsh/.oh-my-zsh/custom
 plugins=(
     git 
     zsh-syntax-highlighting
-    zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
