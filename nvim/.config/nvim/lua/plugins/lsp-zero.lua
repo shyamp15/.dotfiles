@@ -1,54 +1,89 @@
 --- Uncomment these if you want to manage LSP servers from neovim
-return
-{
-    {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
-    {'williamboman/mason.nvim'},
-    {'williamboman/mason-lspconfig.nvim'},
-    {'neovim/nvim-lspconfig'},
-    {'hrsh7th/cmp-nvim-lsp'},
-    {'hrsh7th/nvim-cmp'},
-    {'L3MON4D3/LuaSnip',
-        init = function() 
-            local lsp_zero = require('lsp-zero')
-            lsp_zero.extend_lspconfig()
+return {
+	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
+	{ "williamboman/mason.nvim" },
+	{ "williamboman/mason-lspconfig.nvim" },
+	{ "neovim/nvim-lspconfig" },
+	{ "hrsh7th/cmp-nvim-lsp" },
+	{ -- Autoformat
+		"stevearc/conform.nvim",
+		lazy = false,
+		keys = {
+			{
+				"<leader>f",
+				function()
+					require("conform").format({ async = true, lsp_fallback = true })
+				end,
+				mode = "",
+				desc = "[F]ormat buffer",
+			},
+		},
+		opts = {
+			notify_on_error = false,
+			format_on_save = function(bufnr)
+				-- Disable "format_on_save lsp_fallback" for languages that don't
+				-- have a well standardized coding style. You can add additional
+				-- languages here or re-enable it for the disabled ones.
+				local disable_filetypes = { c = true, cpp = true }
+				return {
+					timeout_ms = 500,
+					lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+				}
+			end,
+			formatters_by_ft = {
+				lua = { "stylua" },
+				-- Conform can also run multiple formatters sequentially
+				-- python = { "isort", "black" },
+				--
+				-- You can use a sub-list to tell conform to run *until* a formatter
+				-- is found.
+				javascript = { { "prettierd", "prettier" } },
+			},
+		},
+	},
+	{ "hrsh7th/nvim-cmp" },
+	{
+		"L3MON4D3/LuaSnip",
+		init = function()
+			local lsp_zero = require("lsp-zero")
+			lsp_zero.extend_lspconfig()
 
+			lsp_zero.on_attach(function(client, bufnr)
+				lsp_zero.default_keymaps({
+					buffer = bufnr,
+					preserve_mappings = false,
+				})
+			end)
 
-            lsp_zero.on_attach(function(client, bufnr)
-                lsp_zero.default_keymaps({
-                    buffer = bufnr,
-                    preserve_mappings = false
-                })
-            end)
+			require("mason").setup({})
+			require("mason-lspconfig").setup({
+				ensure_installed = { "tsserver" },
+				handlers = {
+					lsp_zero.default_setup,
+					lua_ls = function()
+						local lua_opts = lsp_zero.nvim_lua_ls()
+						require("lspconfig").lua_ls.setup(lua_opts)
+					end,
+				},
+			})
 
-            require('mason').setup({})
-            require('mason-lspconfig').setup({
-                ensure_installed = {'tsserver'},
-                handlers = {
-                    lsp_zero.default_setup,
-                    lua_ls = function()
-                        local lua_opts = lsp_zero.nvim_lua_ls()
-                        require('lspconfig').lua_ls.setup(lua_opts)
-                    end,
-                }
-            })
+			local cmp = require("cmp")
+			local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
-            local cmp = require('cmp')
-            local cmp_select = {behavior = cmp.SelectBehavior.Select}
-
-            cmp.setup({
-                sources = {
-                    {name = 'path'},
-                    {name = 'nvim_lsp'},
-                    {name = 'nvim_lua'},
-                },
-                formatting = lsp_zero.cmp_format(),
-                mapping = cmp.mapping.preset.insert({
-                    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                    ['<cr>'] = cmp.mapping.confirm({ select = true }),
-                    ['<C-Space>'] = cmp.mapping.complete(),
-                }),
-            })
-        end
-    }
+			cmp.setup({
+				sources = {
+					{ name = "path" },
+					{ name = "nvim_lsp" },
+					{ name = "nvim_lua" },
+				},
+				formatting = lsp_zero.cmp_format(),
+				mapping = cmp.mapping.preset.insert({
+					["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+					["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+					["<cr>"] = cmp.mapping.confirm({ select = true }),
+					["<C-Space>"] = cmp.mapping.complete(),
+				}),
+			})
+		end,
+	},
 }
