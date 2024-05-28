@@ -2,7 +2,19 @@ return {
 	"nvim-telescope/telescope.nvim",
 	tag = "0.1.5",
 	dependencies = { "nvim-lua/plenary.nvim" },
-	init = function()
+	config = function()
+		require("telescope").setup({
+			defaults = {
+				path_display = {
+					"truncate", -- You can replace "shorten" with other options like "absolute" or "tail".
+				},
+			},
+			extensions = {
+				["ui-select"] = {
+					require("telescope.themes").get_dropdown(),
+				},
+			},
+		})
 		local builtin = require("telescope.builtin")
 		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 		vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
