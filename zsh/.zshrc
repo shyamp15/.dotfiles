@@ -11,6 +11,9 @@ alias grep="rg"
 #Change autosuggest accept to escape
 KEYTIMEOUT=1
 
+#Change ctrl+d to not close the shell
+set -o ignoreeof
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
