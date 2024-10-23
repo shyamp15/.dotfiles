@@ -25,4 +25,4 @@ family = "monospace"
 style = "Regular"
 
 [window]
-opacity = 0.85
+opacity = 1.0
