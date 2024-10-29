@@ -24,5 +24,8 @@ style = "Italic"
 family = "monospace"
 style = "Regular"
 
+[keyboard]
+bindings = [{ key= "Back", mods= "Control", chars= "\u0017"}]
+
 [window]
 opacity = 1.0
