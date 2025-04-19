@@ -25,7 +25,11 @@ family = "JetbrainsMono Nerd Font"
 style = "Bold Italic"
 
 [keyboard]
-bindings = [{ key= "Back", mods= "Control", chars= "\u0017"}]
+bindings = [
+    { key= "Back", mods= "Control", chars= "\u0017"},
+    { key = "V", mods = "Control", action = "Paste" }
+]
+
 
 [window]
 opacity = 1.0
