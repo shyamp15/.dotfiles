@@ -121,3 +121,20 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+bindkey -v
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]]; then
+    echo -ne '\e[2 q' # Steady block mode in command mode
+  else 
+    echo -ne '\e[6 q' # Steady beam mode in insert mode
+  fi
+}
+zle -N zle-keymap-select
+
+function zle-line-init {
+  echo -ne '\e[6 q' # Always start in insert mode (beam)
+}
+zle -N zle-line-init
+
+LS_COLORS="$LS_COLORS:ow=1;34:tw=1;34:"
